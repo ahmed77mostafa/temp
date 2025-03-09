@@ -48,6 +48,7 @@ int main(void)
 
 	//INPUTs
 	GPIOA->MODER &= ~(3 << (2 * BUTTON_PIN));
+	GPIOA->PUPDR |= (1 << (2 * BUTTON_PIN));
 
 	GPIOA->MODER = 0;
 
@@ -57,6 +58,26 @@ int main(void)
 		int ADC_read = ADC1->DR;
 		float volt = (ADC_read * (3.3 )/ 4095);
 		float temp = volt * 100;
+
+		if(temp < 25)
+		{
+			GPIOA->ODR |= (1 << GREENLED_PIN);
+		}
+		else if(temp < 35)
+		{
+			GPIOA->ODR |= (1 << YELLOWLED_PIN);
+			GPIOA->ODR |= (1 << FAN_PIN);
+		}
+		else if(temp > 35 && temp < 45)
+		{
+			GPIOA->ODR |= (1 << REDLED_PIN);
+			GPIOA->ODR |= (1 << FAN_PIN);
+		}
+		else if(temp > 45)
+		{
+			GPIOA->ODR |= (1 << REDLED_PIN);
+			GPIOA->ODR |= (1 << BUZZER_PIN);
+		}
 	}
 
 }
