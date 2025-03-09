@@ -22,9 +22,11 @@
 #define GREENLED_PIN 1
 #define YELLOWLED_PIN 2
 #define REDLED_PIN 3
+#define FAN_PIN 7
+#define BUZZER_PIN 8
 #define BUTTON_PIN 10
 
-#define FAN_PIN 7
+#define VREF 3.3f
 
 int main(void)
 {
@@ -47,8 +49,8 @@ int main(void)
 	GPIOB->MODER |= (1 << (2 * FAN_PIN));
 
 	//INPUTs
-	GPIOA->MODER &= ~(3 << (2 * BUTTON_PIN));
-	GPIOA->PUPDR |= (1 << (2 * BUTTON_PIN));
+	GPIOA->MODER &= ~(0b11 << (2 * BUTTON_PIN));
+	GPIOA->PUPDR |= (0b10 << (2 * BUTTON_PIN));
 
 	GPIOA->MODER = 0;
 
@@ -56,7 +58,7 @@ int main(void)
 		ADC1->CR2 |= (1 << 30);
 		while(!(ADC1->SR & (1 << 1)));
 		int ADC_read = ADC1->DR;
-		float volt = (ADC_read * (3.3 )/ 4095);
+		float volt = (ADC_read * VREF)/ 4095;
 		float temp = volt * 100;
 
 		if(temp < 25)
