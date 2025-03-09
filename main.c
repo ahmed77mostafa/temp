@@ -49,21 +49,29 @@ int main(void)
 		if(temp < 25)
 		{
 			GPIOA->ODR |= (1 << GREENLED_PIN);
+			GPIOA->ODR &= ~((1 << YELLOWLED_PIN) | (1 << REDLED_PIN) | (1 << FAN_PIN) | (1 << BUZZER_PIN));
 		}
 		else if(temp < 35)
 		{
 			GPIOA->ODR |= (1 << YELLOWLED_PIN);
 			GPIOA->ODR |= (1 << FAN_PIN);
+			GPIOA->ODR &= ~((1 << GREENLED_PIN) | (1 << REDLED_PIN) | (1 << FAN_PIN));
 		}
 		else if(temp > 35 && temp < 45)
 		{
 			GPIOA->ODR |= (1 << REDLED_PIN);
 			GPIOA->ODR |= (1 << FAN_PIN);
+			GPIOA->ODR &= ~((1 << GREENLED_PIN) | (1 << YELLOWLED_PIN) | (1 << BUZZER_PIN));
 		}
 		else if(temp > 45)
 		{
 			GPIOA->ODR |= (1 << REDLED_PIN);
 			GPIOA->ODR |= (1 << BUZZER_PIN);
+			GPIOA->ODR &= ~((1 << GREENLED_PIN) | (1 << YELLOWLED_PIN) | (1 << FAN_PIN));
+		}
+		if(!(GPIOA->IDR >> BUTTON_PIN & 1))
+		{
+			GPIOA->ODR &= ~((1 << GREENLED_PIN) | (1 << YELLOWLED_PIN) | (1 << REDLED_PIN) | (1 << FAN_PIN) | (1 << BUZZER_PIN));
 		}
 	}
 
