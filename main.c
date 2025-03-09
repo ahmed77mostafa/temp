@@ -31,6 +31,9 @@ int main(void)
 	GPIOA->MODER &= ~(0b11 << (2 * BUTTON_PIN));
 	GPIOA->PUPDR |= (0b10 << (2 * BUTTON_PIN));
 
+	GPIOA->MODER |= (0b11 << (2 * LM35_PIN)); // Set PA0 as analog input
+
+
 	// Clear pins
 	GPIOA->MODER = 0;
 
